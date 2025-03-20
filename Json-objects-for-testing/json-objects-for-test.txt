@@ -1,0 +1,15 @@
+
+create ad
+{
+  "title": "iPhone 15 Pro Max - 1TB",
+  "description": "Brand new iPhone 15 Pro Max (1TB) - Factory Unlocked. Comes with full box, charger, and official warranty.",
+  "price": 530000.00,
+  "status": "Available",
+  "userId": 2,
+  "categoryId": 1,
+  "locationId": 3,
+  "imageUrls": [
+    "https://example.com/iphone15pro-front.jpg",
+    "https://example.com/iphone15pro-back.jpg"
+  ]
+}
