@@ -32,3 +32,437 @@ REGISTER USER
   "phone": "0787656665"
 }
 
+LOGIN USER
+{
+  "email": "jagath@example.com",
+  "password": "password",
+}
+
+
+CATEGORY TABLE
+INSERT INTO category (id, name, image_url, parent_category_id)
+VALUES
+('550e8400-e29b-41d4-a716-446655440000', 'Main category', ' ', '550e8400-e29b-41d4-a716-446655440000');
+
+
+
+
+
+
+
+for location table data set
+
+-- Insert Sri Lanka as the main location
+INSERT INTO LOCATION (id, name, parent_location_id)
+VALUES ('sl-0001', 'Sri Lanka', NULL);
+
+-- Insert 25 Districts
+INSERT INTO LOCATION (id, name, parent_location_id)
+VALUES
+('sl-01', 'Colombo', 'sl-0001'),
+('sl-02', 'Gampaha', 'sl-0001'),
+('sl-03', 'Kalutara', 'sl-0001'),
+('sl-04', 'Kandy', 'sl-0001'),
+('sl-05', 'Matale', 'sl-0001'),
+('sl-06', 'Nuwara Eliya', 'sl-0001'),
+('sl-07', 'Galle', 'sl-0001'),
+('sl-08', 'Matara', 'sl-0001'),
+('sl-09', 'Hambantota', 'sl-0001'),
+('sl-10', 'Jaffna', 'sl-0001'),
+('sl-11', 'Kilinochchi', 'sl-0001'),
+('sl-12', 'Mannar', 'sl-0001'),
+('sl-13', 'Vavuniya', 'sl-0001'),
+('sl-14', 'Mullaitivu', 'sl-0001'),
+('sl-15', 'Batticaloa', 'sl-0001'),
+('sl-16', 'Ampara', 'sl-0001'),
+('sl-17', 'Trincomalee', 'sl-0001'),
+('sl-18', 'Kurunegala', 'sl-0001'),
+('sl-19', 'Puttalam', 'sl-0001'),
+('sl-20', 'Anuradhapura', 'sl-0001'),
+('sl-21', 'Polonnaruwa', 'sl-0001'),
+('sl-22', 'Badulla', 'sl-0001'),
+('sl-23', 'Monaragala', 'sl-0001'),
+('sl-24', 'Ratnapura', 'sl-0001'),
+('sl-25', 'Kegalle', 'sl-0001');
+
+-- Insert Cities & Towns for Each District
+-- Colombo District
+INSERT INTO LOCATION (id, name, parent_location_id)
+VALUES
+('sl-01-01', 'Colombo 01 (Fort)', 'sl-01'),
+('sl-01-02', 'Colombo 02 (Slave Island)', 'sl-01'),
+('sl-01-03', 'Colombo 03 (Kollupitiya)', 'sl-01'),
+('sl-01-04', 'Colombo 04 (Bambalapitiya)', 'sl-01'),
+('sl-01-05', 'Colombo 05 (Havelock Town)', 'sl-01'),
+('sl-01-06', 'Colombo 06 (Wellawatta)', 'sl-01'),
+('sl-01-07', 'Colombo 07 (Cinnamon Gardens)', 'sl-01'),
+('sl-01-08', 'Colombo 08 (Borella)', 'sl-01'),
+('sl-01-09', 'Colombo 09 (Dematagoda)', 'sl-01'),
+('sl-01-10', 'Colombo 10 (Maradana)', 'sl-01'),
+('sl-01-11', 'Colombo 11 (Pettah)', 'sl-01'),
+('sl-01-12', 'Colombo 12 (Hulftsdorp)', 'sl-01'),
+('sl-01-13', 'Colombo 13 (Kotahena)', 'sl-01'),
+('sl-01-14', 'Colombo 14 (Grandpass)', 'sl-01'),
+('sl-01-15', 'Colombo 15 (Mattakkuliya)', 'sl-01'),
+('sl-01-16', 'Maharagama', 'sl-01'),
+('sl-01-17', 'Dehiwala', 'sl-01'),
+('sl-01-18', 'Mount Lavinia', 'sl-01'),
+('sl-01-19', 'Homagama', 'sl-01'),
+('sl-01-20', 'Nugegoda', 'sl-01');
+
+-- Gampaha District
+INSERT INTO LOCATION (id, name, parent_location_id)
+VALUES
+('sl-02-01', 'Gampaha Town', 'sl-02'),
+('sl-02-02', 'Negombo', 'sl-02'),
+('sl-02-03', 'Ja-Ela', 'sl-02'),
+('sl-02-04', 'Wattala', 'sl-02'),
+('sl-02-05', 'Minuwangoda', 'sl-02'),
+('sl-02-06', 'Divulapitiya', 'sl-02'),
+('sl-02-07', 'Ragama', 'sl-02'),
+('sl-02-08', 'Kelaniya', 'sl-02'),
+('sl-02-09', 'Kadawatha', 'sl-02'),
+('sl-02-10', 'Kiribathgoda', 'sl-02');
+
+
+
+
+data from claude.ai
+-- Insert Sri Lanka as the root location
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Sri Lanka', NULL);
+
+-- Get the ID of Sri Lanka to use as parent for districts
+SET @sri_lanka_id = (SELECT id FROM LOCATION WHERE name = 'Sri Lanka' AND parent_location_id IS NULL);
+
+-- Insert the 25 districts of Sri Lanka
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Colombo', @sri_lanka_id),
+(UUID(), 'Gampaha', @sri_lanka_id),
+(UUID(), 'Kalutara', @sri_lanka_id),
+(UUID(), 'Kandy', @sri_lanka_id),
+(UUID(), 'Matale', @sri_lanka_id),
+(UUID(), 'Nuwara Eliya', @sri_lanka_id),
+(UUID(), 'Galle', @sri_lanka_id),
+(UUID(), 'Matara', @sri_lanka_id),
+(UUID(), 'Hambantota', @sri_lanka_id),
+(UUID(), 'Jaffna', @sri_lanka_id),
+(UUID(), 'Kilinochchi', @sri_lanka_id),
+(UUID(), 'Mannar', @sri_lanka_id),
+(UUID(), 'Vavuniya', @sri_lanka_id),
+(UUID(), 'Mullaitivu', @sri_lanka_id),
+(UUID(), 'Batticaloa', @sri_lanka_id),
+(UUID(), 'Ampara', @sri_lanka_id),
+(UUID(), 'Trincomalee', @sri_lanka_id),
+(UUID(), 'Kurunegala', @sri_lanka_id),
+(UUID(), 'Puttalam', @sri_lanka_id),
+(UUID(), 'Anuradhapura', @sri_lanka_id),
+(UUID(), 'Polonnaruwa', @sri_lanka_id),
+(UUID(), 'Badulla', @sri_lanka_id),
+(UUID(), 'Monaragala', @sri_lanka_id),
+(UUID(), 'Ratnapura', @sri_lanka_id),
+(UUID(), 'Kegalle', @sri_lanka_id);
+
+-- Now add cities/towns for each district
+
+-- 1. Colombo District cities
+SET @colombo_id = (SELECT id FROM LOCATION WHERE name = 'Colombo' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Colombo City', @colombo_id),
+(UUID(), 'Dehiwala', @colombo_id),
+(UUID(), 'Moratuwa', @colombo_id),
+(UUID(), 'Sri Jayawardenepura Kotte', @colombo_id),
+(UUID(), 'Kaduwela', @colombo_id),
+(UUID(), 'Homagama', @colombo_id),
+(UUID(), 'Kesbewa', @colombo_id),
+(UUID(), 'Kolonnawa', @colombo_id);
+
+-- 2. Gampaha District cities
+SET @gampaha_id = (SELECT id FROM LOCATION WHERE name = 'Gampaha' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Gampaha City', @gampaha_id),
+(UUID(), 'Negombo', @gampaha_id),
+(UUID(), 'Wattala', @gampaha_id),
+(UUID(), 'Ja-Ela', @gampaha_id),
+(UUID(), 'Kadawatha', @gampaha_id),
+(UUID(), 'Nittambuwa', @gampaha_id),
+(UUID(), 'Minuwangoda', @gampaha_id),
+(UUID(), 'Kelaniya', @gampaha_id);
+
+-- 3. Kalutara District cities
+SET @kalutara_id = (SELECT id FROM LOCATION WHERE name = 'Kalutara' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Kalutara City', @kalutara_id),
+(UUID(), 'Panadura', @kalutara_id),
+(UUID(), 'Horana', @kalutara_id),
+(UUID(), 'Bandaragama', @kalutara_id),
+(UUID(), 'Beruwala', @kalutara_id),
+(UUID(), 'Aluthgama', @kalutara_id),
+(UUID(), 'Wadduwa', @kalutara_id),
+(UUID(), 'Matugama', @kalutara_id);
+
+-- 4. Kandy District cities
+SET @kandy_id = (SELECT id FROM LOCATION WHERE name = 'Kandy' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Kandy City', @kandy_id),
+(UUID(), 'Peradeniya', @kandy_id),
+(UUID(), 'Katugastota', @kandy_id),
+(UUID(), 'Gampola', @kandy_id),
+(UUID(), 'Nawalapitiya', @kandy_id),
+(UUID(), 'Akurana', @kandy_id),
+(UUID(), 'Pilimathalawa', @kandy_id),
+(UUID(), 'Kadugannawa', @kandy_id);
+
+-- 5. Matale District cities
+SET @matale_id = (SELECT id FROM LOCATION WHERE name = 'Matale' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Matale City', @matale_id),
+(UUID(), 'Dambulla', @matale_id),
+(UUID(), 'Galewela', @matale_id),
+(UUID(), 'Rattota', @matale_id),
+(UUID(), 'Naula', @matale_id),
+(UUID(), 'Ukuwela', @matale_id),
+(UUID(), 'Pallepola', @matale_id),
+(UUID(), 'Yatawatta', @matale_id);
+
+-- 6. Nuwara Eliya District cities
+SET @nuwaraeliya_id = (SELECT id FROM LOCATION WHERE name = 'Nuwara Eliya' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Nuwara Eliya City', @nuwaraeliya_id),
+(UUID(), 'Hatton', @nuwaraeliya_id),
+(UUID(), 'Talawakele', @nuwaraeliya_id),
+(UUID(), 'Maskeliya', @nuwaraeliya_id),
+(UUID(), 'Ragala', @nuwaraeliya_id),
+(UUID(), 'Lindula', @nuwaraeliya_id),
+(UUID(), 'Haputale', @nuwaraeliya_id),
+(UUID(), 'Kotagala', @nuwaraeliya_id);
+
+-- 7. Galle District cities
+SET @galle_id = (SELECT id FROM LOCATION WHERE name = 'Galle' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Galle City', @galle_id),
+(UUID(), 'Ambalangoda', @galle_id),
+(UUID(), 'Hikkaduwa', @galle_id),
+(UUID(), 'Bentota', @galle_id),
+(UUID(), 'Elpitiya', @galle_id),
+(UUID(), 'Baddegama', @galle_id),
+(UUID(), 'Karapitiya', @galle_id),
+(UUID(), 'Unawatuna', @galle_id);
+
+-- 8. Matara District cities
+SET @matara_id = (SELECT id FROM LOCATION WHERE name = 'Matara' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Matara City', @matara_id),
+(UUID(), 'Weligama', @matara_id),
+(UUID(), 'Deniyaya', @matara_id),
+(UUID(), 'Dickwella', @matara_id),
+(UUID(), 'Akuressa', @matara_id),
+(UUID(), 'Kamburupitiya', @matara_id),
+(UUID(), 'Hakmana', @matara_id),
+(UUID(), 'Mirissa', @matara_id);
+
+-- 9. Hambantota District cities
+SET @hambantota_id = (SELECT id FROM LOCATION WHERE name = 'Hambantota' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Hambantota City', @hambantota_id),
+(UUID(), 'Tangalle', @hambantota_id),
+(UUID(), 'Tissamaharama', @hambantota_id),
+(UUID(), 'Ambalantota', @hambantota_id),
+(UUID(), 'Beliatta', @hambantota_id),
+(UUID(), 'Weeraketiya', @hambantota_id),
+(UUID(), 'Lunugamvehera', @hambantota_id),
+(UUID(), 'Katuwana', @hambantota_id);
+
+-- 10. Jaffna District cities
+SET @jaffna_id = (SELECT id FROM LOCATION WHERE name = 'Jaffna' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Jaffna City', @jaffna_id),
+(UUID(), 'Chavakachcheri', @jaffna_id),
+(UUID(), 'Point Pedro', @jaffna_id),
+(UUID(), 'Nallur', @jaffna_id),
+(UUID(), 'Manipay', @jaffna_id),
+(UUID(), 'Kopay', @jaffna_id),
+(UUID(), 'Karaveddy', @jaffna_id),
+(UUID(), 'Chankanai', @jaffna_id);
+
+-- 11. Kilinochchi District cities
+SET @kilinochchi_id = (SELECT id FROM LOCATION WHERE name = 'Kilinochchi' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Kilinochchi Town', @kilinochchi_id),
+(UUID(), 'Paranthan', @kilinochchi_id),
+(UUID(), 'Palai', @kilinochchi_id),
+(UUID(), 'Elephant Pass', @kilinochchi_id),
+(UUID(), 'Pallai', @kilinochchi_id),
+(UUID(), 'Poonakary', @kilinochchi_id),
+(UUID(), 'Karachchi', @kilinochchi_id),
+(UUID(), 'Kandavalai', @kilinochchi_id);
+
+-- 12. Mannar District cities
+SET @mannar_id = (SELECT id FROM LOCATION WHERE name = 'Mannar' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Mannar Town', @mannar_id),
+(UUID(), 'Talaimannar', @mannar_id),
+(UUID(), 'Murukkan', @mannar_id),
+(UUID(), 'Nanattan', @mannar_id),
+(UUID(), 'Madhu', @mannar_id),
+(UUID(), 'Adampan', @mannar_id),
+(UUID(), 'Pesalai', @mannar_id),
+(UUID(), 'Vidathaltivu', @mannar_id);
+
+-- 13. Vavuniya District cities
+SET @vavuniya_id = (SELECT id FROM LOCATION WHERE name = 'Vavuniya' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Vavuniya Town', @vavuniya_id),
+(UUID(), 'Cheddikulam', @vavuniya_id),
+(UUID(), 'Nedunkeni', @vavuniya_id),
+(UUID(), 'Omanthai', @vavuniya_id),
+(UUID(), 'Pampaimadu', @vavuniya_id),
+(UUID(), 'Vavuniya South', @vavuniya_id),
+(UUID(), 'Madukanda', @vavuniya_id),
+(UUID(), 'Puliyankulam', @vavuniya_id);
+
+-- 14. Mullaitivu District cities
+SET @mullaitivu_id = (SELECT id FROM LOCATION WHERE name = 'Mullaitivu' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Mullaitivu Town', @mullaitivu_id),
+(UUID(), 'Puthukkudiyiruppu', @mullaitivu_id),
+(UUID(), 'Oddusuddan', @mullaitivu_id),
+(UUID(), 'Mallavi', @mullaitivu_id),
+(UUID(), 'Thunukkai', @mullaitivu_id),
+(UUID(), 'Mankulam', @mullaitivu_id),
+(UUID(), 'Kokkilai', @mullaitivu_id),
+(UUID(), 'Mulliyawalai', @mullaitivu_id);
+
+-- 15. Batticaloa District cities
+SET @batticaloa_id = (SELECT id FROM LOCATION WHERE name = 'Batticaloa' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Batticaloa City', @batticaloa_id),
+(UUID(), 'Kattankudy', @batticaloa_id),
+(UUID(), 'Eravur', @batticaloa_id),
+(UUID(), 'Valaichenai', @batticaloa_id),
+(UUID(), 'Chenkalady', @batticaloa_id),
+(UUID(), 'Kaluwanchikudy', @batticaloa_id),
+(UUID(), 'Kiran', @batticaloa_id),
+(UUID(), 'Vakarai', @batticaloa_id);
+
+-- 16. Ampara District cities
+SET @ampara_id = (SELECT id FROM LOCATION WHERE name = 'Ampara' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Ampara Town', @ampara_id),
+(UUID(), 'Kalmunai', @ampara_id),
+(UUID(), 'Sammanthurai', @ampara_id),
+(UUID(), 'Akkaraipattu', @ampara_id),
+(UUID(), 'Pottuvil', @ampara_id),
+(UUID(), 'Uhana', @ampara_id),
+(UUID(), 'Mahaoya', @ampara_id),
+(UUID(), 'Sainthamaruthu', @ampara_id);
+
+-- 17. Trincomalee District cities
+SET @trincomalee_id = (SELECT id FROM LOCATION WHERE name = 'Trincomalee' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Trincomalee Town', @trincomalee_id),
+(UUID(), 'Kantale', @trincomalee_id),
+(UUID(), 'Kinniya', @trincomalee_id),
+(UUID(), 'Muthur', @trincomalee_id),
+(UUID(), 'Nilaveli', @trincomalee_id),
+(UUID(), 'Thampalakamam', @trincomalee_id),
+(UUID(), 'Seruwila', @trincomalee_id),
+(UUID(), 'Kuchchaveli', @trincomalee_id);
+
+-- 18. Kurunegala District cities
+SET @kurunegala_id = (SELECT id FROM LOCATION WHERE name = 'Kurunegala' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Kurunegala City', @kurunegala_id),
+(UUID(), 'Kuliyapitiya', @kurunegala_id),
+(UUID(), 'Narammala', @kurunegala_id),
+(UUID(), 'Pannala', @kurunegala_id),
+(UUID(), 'Wariyapola', @kurunegala_id),
+(UUID(), 'Nikaweratiya', @kurunegala_id),
+(UUID(), 'Mawathagama', @kurunegala_id),
+(UUID(), 'Polgahawela', @kurunegala_id);
+
+-- 19. Puttalam District cities
+SET @puttalam_id = (SELECT id FROM LOCATION WHERE name = 'Puttalam' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Puttalam Town', @puttalam_id),
+(UUID(), 'Chilaw', @puttalam_id),
+(UUID(), 'Wennappuwa', @puttalam_id),
+(UUID(), 'Marawila', @puttalam_id),
+(UUID(), 'Anamaduwa', @puttalam_id),
+(UUID(), 'Dankotuwa', @puttalam_id),
+(UUID(), 'Nattandiya', @puttalam_id),
+(UUID(), 'Kalpitiya', @puttalam_id);
+
+-- 20. Anuradhapura District cities
+SET @anuradhapura_id = (SELECT id FROM LOCATION WHERE name = 'Anuradhapura' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Anuradhapura City', @anuradhapura_id),
+(UUID(), 'Kekirawa', @anuradhapura_id),
+(UUID(), 'Medawachchiya', @anuradhapura_id),
+(UUID(), 'Tambuttegama', @anuradhapura_id),
+(UUID(), 'Kahatagasdigiliya', @anuradhapura_id),
+(UUID(), 'Mihintale', @anuradhapura_id),
+(UUID(), 'Galenbindunuwewa', @anuradhapura_id),
+(UUID(), 'Horowpothana', @anuradhapura_id);
+
+-- 21. Polonnaruwa District cities
+SET @polonnaruwa_id = (SELECT id FROM LOCATION WHERE name = 'Polonnaruwa' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Polonnaruwa Town', @polonnaruwa_id),
+(UUID(), 'Kaduruwela', @polonnaruwa_id),
+(UUID(), 'Hingurakgoda', @polonnaruwa_id),
+(UUID(), 'Medirigiriya', @polonnaruwa_id),
+(UUID(), 'Lankapura', @polonnaruwa_id),
+(UUID(), 'Bakamuna', @polonnaruwa_id),
+(UUID(), 'Welikanda', @polonnaruwa_id),
+(UUID(), 'Aralaganwila', @polonnaruwa_id);
+
+-- 22. Badulla District cities
+SET @badulla_id = (SELECT id FROM LOCATION WHERE name = 'Badulla' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Badulla City', @badulla_id),
+(UUID(), 'Bandarawela', @badulla_id),
+(UUID(), 'Welimada', @badulla_id),
+(UUID(), 'Haputale', @badulla_id),
+(UUID(), 'Mahiyanganaya', @badulla_id),
+(UUID(), 'Ella', @badulla_id),
+(UUID(), 'Hali Ela', @badulla_id),
+(UUID(), 'Passara', @badulla_id);
+
+-- 23. Monaragala District cities
+SET @monaragala_id = (SELECT id FROM LOCATION WHERE name = 'Monaragala' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Monaragala Town', @monaragala_id),
+(UUID(), 'Wellawaya', @monaragala_id),
+(UUID(), 'Buttala', @monaragala_id),
+(UUID(), 'Bibile', @monaragala_id),
+(UUID(), 'Kataragama', @monaragala_id),
+(UUID(), 'Siyambalanduwa', @monaragala_id),
+(UUID(), 'Thanamalwila', @monaragala_id),
+(UUID(), 'Badalkumbura', @monaragala_id);
+
+-- 24. Ratnapura District cities
+SET @ratnapura_id = (SELECT id FROM LOCATION WHERE name = 'Ratnapura' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Ratnapura City', @ratnapura_id),
+(UUID(), 'Embilipitiya', @ratnapura_id),
+(UUID(), 'Balangoda', @ratnapura_id),
+(UUID(), 'Eheliyagoda', @ratnapura_id),
+(UUID(), 'Pelmadulla', @ratnapura_id),
+(UUID(), 'Kuruwita', @ratnapura_id),
+(UUID(), 'Godakawela', @ratnapura_id),
+(UUID(), 'Kahawatta', @ratnapura_id);
+
+-- 25. Kegalle District cities
+SET @kegalle_id = (SELECT id FROM LOCATION WHERE name = 'Kegalle' AND parent_location_id = @sri_lanka_id);
+INSERT INTO LOCATION (id, name, parent_location_id) VALUES
+(UUID(), 'Kegalle Town', @kegalle_id),
+(UUID(), 'Mawanella', @kegalle_id),
+(UUID(), 'Rambukkana', @kegalle_id),
+(UUID(), 'Warakapola', @kegalle_id),
+(UUID(), 'Ruwanwella', @kegalle_id),
+(UUID(), 'Galigamuwa', @kegalle_id),
+(UUID(), 'Dehiowita', @kegalle_id),
+(UUID(), 'Deraniyagala', @kegalle_id);
+
+
