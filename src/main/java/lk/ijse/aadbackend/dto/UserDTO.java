@@ -2,15 +2,22 @@ package lk.ijse.aadbackend.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lk.ijse.aadbackend.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+
+import java.util.UUID;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class UserDTO {
+
+    private UUID id;
+
     @NotBlank(message = "Name is required")
     private String name;
 
@@ -24,5 +31,9 @@ public class UserDTO {
     @NotBlank(message = "Phone number is required")
     private String phone;
 
-    private String role;
+    private String role = "USER";
+
+    private Status status = Status.ACTIVE;
+
+
 }

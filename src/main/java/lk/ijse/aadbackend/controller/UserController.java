@@ -31,6 +31,7 @@ public class UserController {
             int res = userService.saveUser(userDTO);
             switch (res) {
                 case VarList.Created -> {
+
                     String token = jwtUtil.generateToken(userDTO);
                     AuthDTO authDTO = new AuthDTO();
                     authDTO.setEmail(userDTO.getEmail());

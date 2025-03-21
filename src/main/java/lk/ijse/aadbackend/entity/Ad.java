@@ -3,16 +3,21 @@ package lk.ijse.aadbackend.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
 public class Ad {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "VARCHAR(36)" , nullable = false , unique = true )
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private UUID id;
 
     @NotBlank(message = "Title is required")
     private String title;
@@ -43,9 +48,16 @@ public class Ad {
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
-    @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
-    private List<AdImage> images;
+    // Store image file names as a comma-separated string
+    @Column(columnDefinition = "TEXT")
+    private String images;
 
-    @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
-    private List<Chat> chats;
+    // Helper method to add image filenames
+    public void addImage(String imageName) {
+        if (this.images == null || this.images.isEmpty()) {
+            this.images = imageName;
+        } else {
+            this.images += "," + imageName;
+        }
+    }
 }

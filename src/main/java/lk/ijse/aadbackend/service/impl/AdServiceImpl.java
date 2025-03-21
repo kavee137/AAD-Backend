@@ -2,7 +2,6 @@ package lk.ijse.aadbackend.service.impl;
 
 import lk.ijse.aadbackend.dto.AdDTO;
 import lk.ijse.aadbackend.entity.Ad;
-import lk.ijse.aadbackend.entity.AdImage;
 import lk.ijse.aadbackend.entity.Category;
 import lk.ijse.aadbackend.entity.Location;
 import lk.ijse.aadbackend.entity.User;
@@ -12,10 +11,12 @@ import lk.ijse.aadbackend.util.VarList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -23,9 +24,6 @@ public class AdServiceImpl implements AdService {
 
     @Autowired
     private AdRepository adRepository;
-
-    @Autowired
-    private AdImageRepository adImageRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -37,7 +35,7 @@ public class AdServiceImpl implements AdService {
     private LocationRepository locationRepository;
 
     @Override
-    public int createAd(AdDTO adDTO) {
+    public int createAd(AdDTO adDTO, List<MultipartFile> imageFiles) {
         try {
             // Create new Ad instance and set properties manually
             Ad ad = new Ad();
@@ -60,19 +58,37 @@ public class AdServiceImpl implements AdService {
             ad.setCategory(category);
             ad.setLocation(location);
 
-            // Save Ad first to get the generated ID
+            // Save the Ad first to get the generated ID
             Ad savedAd = adRepository.save(ad);
 
-            // Save AdImages if URLs are provided
-            if (adDTO.getImageUrls() != null && !adDTO.getImageUrls().isEmpty()) {
-                List<AdImage> adImages = adDTO.getImageUrls().stream().map(url -> {
-                    AdImage adImage = new AdImage();
-                    adImage.setImageUrl(url);
-                    adImage.setAd(savedAd);
-                    return adImage;
-                }).collect(Collectors.toList());
+            // Image Upload Processing
+            if (imageFiles != null && !imageFiles.isEmpty()) {
+                StringBuilder imageNames = new StringBuilder();
+                String uploadDir = "uploadImages/";
 
-                adImageRepository.saveAll(adImages);
+                File uploadFolder = new File(uploadDir);
+                if (!uploadFolder.exists()) {
+                    uploadFolder.mkdirs();
+                }
+
+                for (MultipartFile file : imageFiles) {
+                    // Generate unique filename
+                    String uniqueFileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+                    File destinationFile = new File(uploadDir + uniqueFileName);
+
+                    // Save file to the directory
+                    file.transferTo(destinationFile);
+
+                    // Append filename to the images column
+                    if (imageNames.length() > 0) {
+                        imageNames.append(",");
+                    }
+                    imageNames.append(uniqueFileName);
+                }
+
+                // Store image names in the Ad entity
+                savedAd.setImages(imageNames.toString());
+                adRepository.save(savedAd);
             }
 
             return VarList.Created;
@@ -80,4 +96,5 @@ public class AdServiceImpl implements AdService {
             throw new RuntimeException("Error while saving ad: " + e.getMessage(), e);
         }
     }
+
 }

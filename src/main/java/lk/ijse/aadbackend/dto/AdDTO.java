@@ -1,13 +1,16 @@
 package lk.ijse.aadbackend.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class AdDTO {
+    private UUID id;
+
     @NotBlank(message = "Title is required")
     private String title;
 
@@ -18,10 +21,18 @@ public class AdDTO {
     @Positive(message = "Price must be greater than zero")
     private Double price;
 
+    @NotBlank(message = "Status is required")
     private String status;
-    private Long categoryId;
-    private Long locationId;
-    private Long userId;
 
-    private List<String> imageUrls; // Add this to store image URLs
+    @NotNull(message = "User ID is required")
+    private UUID userId;
+
+    @NotNull(message = "Category ID is required")
+    private UUID categoryId;
+
+    @NotNull(message = "Location ID is required")
+    private UUID locationId;
+
+    // List of image files to be uploaded
+    private List<MultipartFile> imageFiles;
 }
