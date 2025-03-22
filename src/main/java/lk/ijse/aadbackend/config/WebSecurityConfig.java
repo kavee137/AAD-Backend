@@ -57,6 +57,8 @@ public class WebSecurityConfig {
                                 "/api/v1/user/register",
 
                                 "/api/v1/ad/createAd",
+                                "/api/v1/ad/getAllActiveAds",
+                                "/api/v1/ad/deleteAd/{adId}",
 
                                 "/api/v1/category/getAll",
                                 "/api/v1/category/create",

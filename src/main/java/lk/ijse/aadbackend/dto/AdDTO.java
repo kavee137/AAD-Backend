@@ -2,10 +2,9 @@ package lk.ijse.aadbackend.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.UUID;
+
 
 @Data
 public class AdDTO {
@@ -33,6 +32,6 @@ public class AdDTO {
     @NotNull(message = "Location ID is required")
     private UUID locationId;
 
-    // List of image files to be uploaded
-    private List<MultipartFile> imageFiles;
+//    // List of image files to be uploaded
+//    private List<MultipartFile> imageFiles;
 }

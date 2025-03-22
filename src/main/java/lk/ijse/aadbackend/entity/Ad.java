@@ -52,12 +52,4 @@ public class Ad {
     @Column(columnDefinition = "TEXT")
     private String images;
 
-    // Helper method to add image filenames
-    public void addImage(String imageName) {
-        if (this.images == null || this.images.isEmpty()) {
-            this.images = imageName;
-        } else {
-            this.images += "," + imageName;
-        }
-    }
 }
