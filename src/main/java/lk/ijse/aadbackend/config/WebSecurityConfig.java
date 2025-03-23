@@ -47,6 +47,11 @@ public class WebSecurityConfig {
                                 "/api/v1/auth/refreshToken",
                                 "/api/v1/auth/login",
                                 "/api/v1/user/register",
+
+                                "/api/v1/location/parent/{parentLocationId}",
+
+                                "/api/v1/category/{id}",
+
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
@@ -61,8 +66,7 @@ public class WebSecurityConfig {
 
                         // Admin-only endpoints
                         .requestMatchers(
-                                "/api/v1/category/create",
-                                "/api/v1/category/{id}"
+                                "/api/v1/category/create"
                         ).hasRole("ADMIN")  // Only accessible by users with ROLE_ADMIN
 
                         .anyRequest().authenticated()

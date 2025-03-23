@@ -66,6 +66,7 @@ public class AuthController {
         authDTO.setToken(token);
         authDTO.setRole(loadedUser.getRole());
         authDTO.setName(loadedUser.getName());
+        authDTO.setId(loadedUser.getId());
 
         System.out.println(authDTO);
 

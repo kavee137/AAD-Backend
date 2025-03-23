@@ -1,5 +1,7 @@
 package lk.ijse.aadbackend.service.impl;
 
+import lk.ijse.aadbackend.dto.LocationDTO;
+import lk.ijse.aadbackend.entity.Location;
 import lk.ijse.aadbackend.service.CategoryService;
 
 import lk.ijse.aadbackend.dto.CategoryDTO;
@@ -79,10 +81,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO getCategoryById(UUID id) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-        return modelMapper.map(category, CategoryDTO.class);
+    public List<CategoryDTO> getCategoryByParentCategoryId(UUID parentCategoryId) {
+        List<Category> categories = categoryRepository.findByParentCategoryId(parentCategoryId);
+        return categories.stream()
+                .map(category -> modelMapper.map(category, CategoryDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override

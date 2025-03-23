@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/category")
 public class CategoryController {
@@ -56,8 +57,8 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable UUID id) {
-        return ResponseEntity.ok(categoryService.getCategoryById(id));
+    public ResponseEntity<List<CategoryDTO>> getCategoryById(@PathVariable UUID id) {
+        return ResponseEntity.ok(categoryService.getCategoryByParentCategoryId(id));
     }
 
     @DeleteMapping("/{id}")

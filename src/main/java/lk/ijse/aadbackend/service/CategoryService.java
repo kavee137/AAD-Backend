@@ -10,6 +10,6 @@ import java.util.UUID;
 public interface CategoryService {
     int createCategory(CategoryDTO categoryDTO, MultipartFile image) throws IOException;
     List<CategoryDTO> getAllCategories();
-    CategoryDTO getCategoryById(UUID id);
+    List<CategoryDTO> getCategoryByParentCategoryId(UUID id);
     void deleteCategory(UUID id);
 }
