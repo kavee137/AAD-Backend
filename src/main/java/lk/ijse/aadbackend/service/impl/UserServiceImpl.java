@@ -1,6 +1,7 @@
 package lk.ijse.aadbackend.service.impl;
 
 import lk.ijse.aadbackend.dto.UserDTO;
+import lk.ijse.aadbackend.email.EmailService;
 import lk.ijse.aadbackend.entity.User;
 import lk.ijse.aadbackend.repo.UserRepository;
 import lk.ijse.aadbackend.service.UserService;
@@ -28,6 +29,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private EmailService emailService;
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -63,12 +68,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         } else {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
+            // Send Welcome Email
+            emailService.sendWelcomeEmail(userDTO.getEmail(), userDTO.getName());
+
             userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
             userRepository.save(modelMapper.map(userDTO, User.class));
             return VarList.Created;
         }
 
     }
+
+
 
 
 }
