@@ -17,13 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
-/**
- * @author udarasan
- * @TimeStamp 2023-07-15 15:00
- * @ProjectDetails invoice_service
- */
-
 @EnableWebSecurity
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
@@ -52,27 +45,30 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/v1/auth/refreshToken",
-
                                 "/api/v1/auth/login",
                                 "/api/v1/user/register",
-
-                                "/api/v1/ad/createAd",
-                                "/api/v1/ad/getAllActiveAds",
-                                "/api/v1/ad/deleteAd/{adId}",
-
-                                "/api/v1/category/getAll",
-                                "/api/v1/category/create",
-                                "/api/v1/category/{id}",
-
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html").permitAll()
+                                "/swagger-ui.html"
+                        ).permitAll()  // Publicly accessible URLs
+
+                        // Regular user-only endpoints
+                        .requestMatchers(
+                                "/api/v1/ad/createAd",
+                                "/api/v1/ad/getAllActiveAds",
+                                "/api/v1/ad/deleteAd/{adId}"
+                        ).hasRole("USER")  // Only accessible by users with ROLE_USER
+
+                        // Admin-only endpoints
+                        .requestMatchers(
+                                "/api/v1/category/create",
+                                "/api/v1/category/{id}"
+                        ).hasRole("ADMIN")  // Only accessible by users with ROLE_ADMIN
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
-
 }

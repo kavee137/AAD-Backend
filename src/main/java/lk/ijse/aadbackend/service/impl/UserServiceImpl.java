@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 
 @Service
@@ -48,9 +47,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public UserDTO searchUser(String username) {
-        if (userRepository.existsByEmail(username)) {
-            User user = userRepository.findByEmail(username);
+    public UserDTO searchUser(UserDTO userDTO) {
+        if (userRepository.existsByEmail(userDTO.getEmail())) {
+            User user = userRepository.findByEmail(userDTO.getEmail());
             return modelMapper.map(user, UserDTO.class);
         } else {
             return null;
