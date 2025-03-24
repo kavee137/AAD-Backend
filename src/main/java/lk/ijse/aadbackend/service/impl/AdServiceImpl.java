@@ -124,8 +124,16 @@ public class AdServiceImpl implements AdService {
     public List<AdDTO> getAllActiveAds() {
         List<Ad> activeAds = adRepository.findByStatus("ACTIVE");
 
-        // Convert List<Ad> to List<AdDTO> using ModelMapper
         return activeAds.stream()
+                .map(ad -> modelMapper.map(ad, AdDTO.class))
+                .toList();
+    }
+
+
+    @Override
+    public List<AdDTO> getAdsByUserId(UUID userId) {
+        List<Ad> ads = adRepository.findByUserId(userId);
+        return ads.stream()
                 .map(ad -> modelMapper.map(ad, AdDTO.class))
                 .toList();
     }

@@ -52,17 +52,21 @@ public class WebSecurityConfig {
 
                                 "/api/v1/category/{id}",
 
+
+                                "/api/v1/ad/getAllActiveAds",
+                                "/api/v1/ad/deleteAd/{adId}",
+                                "/api/v1/ad/user/{userId}",
+
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()  // Publicly accessible URLs
 
-                        // Regular user-only endpoints
-                        .requestMatchers(
-                                "/api/v1/ad/createAd",
-                                "/api/v1/ad/getAllActiveAds",
-                                "/api/v1/ad/deleteAd/{adId}"
-                        ).hasRole("USER")  // Only accessible by users with ROLE_USER
+//                         Regular user-only endpoints
+//                        .requestMatchers(
+//
+//
+//                        ).hasRole("USER")  // Only accessible by users with ROLE_USER
 
                         // Admin-only endpoints
                         .requestMatchers(

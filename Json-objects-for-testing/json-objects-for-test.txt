@@ -39,15 +39,12 @@ LOGIN USER
 }
 
 
-CATEGORY TABLE
+----- CATEGORY TABLE
 
-ALTER TABLE category MODIFY COLUMN parent_category_id UUID NULL;
-
+ALTER TABLE category MODIFY COLUMN parent_category_id VARCHAR(36) NULL;
 
 INSERT INTO category (id, name, image_url, parent_category_id)
-VALUES
-('550e8400-e29b-41d4-a716-446655440000', 'Main category', ' ', 'NULL');
-
+VALUES ('550e8400-e29b-41d4-a716-446655440000', 'Main Category', ' ', NULL);
 
 
 
@@ -58,37 +55,38 @@ VALUES
 
 
 -- Insert Sri Lanka as the root location
-INSERT INTO LOCATION (id, name, parent_location_id) VALUES
-(21bf6dc0-07b1-11f0-b8c1-83ce8323275c, 'Sri Lanka', NULL);
+INSERT INTO LOCATION (id, name, parent_location_id)
+VALUES ('21bf6dc0-07b1-11f0-b8c1-83ce8323275c', 'Sri Lanka', NULL);
+
 
 
 -- Insert the 25 districts of Sri Lanka with custom UUIDs and use '21bf6dc0-07b1-11f0-b8c1-83ce8323275c' as parent_location_id
 INSERT INTO LOCATION (id, name, parent_location_id) VALUES
-(UUID(), 'Colombo', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Gampaha', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Kalutara', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Kandy', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Matale', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Nuwara Eliya', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Galle', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Matara', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Hambantota', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Jaffna', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Kilinochchi', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Mannar', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Vavuniya', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Mullaitivu', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Batticaloa', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Ampara', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Trincomalee', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Kurunegala', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Puttalam', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Anuradhapura', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Polonnaruwa', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Badulla', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Monaragala', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Ratnapura', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
-(UUID(), 'Kegalle', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c');
+('78cfb25a-07b1-11f0-b8c1-83ce8323275c', 'Colombo', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfd316-07b1-11f0-b8c1-83ce8323275c', 'Gampaha', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfd6a4-07b1-11f0-b8c1-83ce8323275c', 'Kalutara', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfd82a-07b1-11f0-b8c1-83ce8323275c', 'Kandy', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfd992-07b1-11f0-b8c1-83ce8323275c', 'Matale', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfdadc-07b1-11f0-b8c1-83ce8323275c', 'Nuwara Eliya', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfdc12-07b1-11f0-b8c1-83ce8323275c', 'Galle', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfde42-07b1-11f0-b8c1-83ce8323275c', 'Matara', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfe018-07b1-11f0-b8c1-83ce8323275c', 'Hambantota', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfe162-07b1-11f0-b8c1-83ce8323275c', 'Jaffna', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfe298-07b1-11f0-b8c1-83ce8323275c', 'Kilinochchi', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfe3ce-07b1-11f0-b8c1-83ce8323275c', 'Mannar', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfe504-07b1-11f0-b8c1-83ce8323275c', 'Vavuniya', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfe644-07b1-11f0-b8c1-83ce8323275c', 'Mullaitivu', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfe77a-07b1-11f0-b8c1-83ce8323275c', 'Batticaloa', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfe8b0-07b1-11f0-b8c1-83ce8323275c', 'Ampara', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfea2c-07b1-11f0-b8c1-83ce8323275c', 'Trincomalee', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfeb6c-07b1-11f0-b8c1-83ce8323275c', 'Kurunegala', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfec98-07b1-11f0-b8c1-83ce8323275c', 'Puttalam', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfedc4-07b1-11f0-b8c1-83ce8323275c', 'Anuradhapura', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cfeefa-07b1-11f0-b8c1-83ce8323275c', 'Polonnaruwa', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cff026-07b1-11f0-b8c1-83ce8323275c', 'Badulla', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cff15c-07b1-11f0-b8c1-83ce8323275c', 'Monaragala', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cff288-07b1-11f0-b8c1-83ce8323275c', 'Ratnapura', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c'),
+('78cff4ea-07b1-11f0-b8c1-83ce8323275c', 'Kegalle', '21bf6dc0-07b1-11f0-b8c1-83ce8323275c');
 
 
 
@@ -299,7 +297,7 @@ INSERT INTO location (id, name, parent_location_id) VALUES (UUID(), 'Ratnapura T
 INSERT INTO location (id, name, parent_location_id) VALUES (UUID(), 'Balangoda', '78cff288-07b1-11f0-b8c1-83ce8323275c');
 INSERT INTO location (id, name, parent_location_id) VALUES (UUID(), 'Embilipitiya', '78cff288-07b1-11f0-b8c1-83ce8323275c');
 INSERT INTO location (id, name, parent_location_id) VALUES (UUID(), 'Kuruwita', '78cff288-07b1-11f0-b8c1-83ce8323275c');
-INSERT INTO location (id, name, parent_location_id) VALUES (UUID(), 'Nivithigala', '78cff288-07b1-11f0-b8c1-83ce8323275c');
+INSERT INTO location (id, name, parent_location_id) VALUES (UUID(), 'Nivithigala', '78cff15c-07b1-11f0-b8c1-83ce8323275c');
 INSERT INTO location (id, name, parent_location_id) VALUES (UUID(), 'Elapatha', '78cff288-07b1-11f0-b8c1-83ce8323275c');
 
 -- Kegalle District towns

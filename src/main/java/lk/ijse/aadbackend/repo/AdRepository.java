@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface AdRepository  extends JpaRepository<Ad, UUID> {
     List<Ad> findByStatus(String status);
 
+    List<Ad> findByUserId(UUID userId);
+
 }

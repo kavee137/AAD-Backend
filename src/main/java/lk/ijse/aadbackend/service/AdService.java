@@ -12,4 +12,6 @@ public interface AdService {
     int deleteAd(UUID adId);
 
     List<AdDTO> getAllActiveAds();
+
+    List<AdDTO> getAdsByUserId(UUID userId);
 }

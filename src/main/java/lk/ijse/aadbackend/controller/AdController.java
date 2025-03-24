@@ -34,16 +34,24 @@ public class AdController {
     public ResponseEntity<ResponseDTO> getAllActiveAds() {
         List<AdDTO> activeAds = adService.getAllActiveAds();
 
-        return ResponseEntity.ok(new ResponseDTO(VarList.Created, "Active ads retrieved successfully", activeAds));
+        return ResponseEntity.ok(new ResponseDTO(VarList.OK, "Active ads retrieved successfully", activeAds));
     }
 
 
-
-
     @PostMapping(value = "/createAd", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<ResponseDTO> createAd(
             @RequestParam("adDTO") String adDTOJson,  // JSON as a String
             @RequestPart(value = "images", required = false) List<MultipartFile> imageFiles) {
+
+        System.out.println("AdDTO JSON: " + adDTOJson);
+        System.out.println("Total images received: " + (imageFiles != null ? imageFiles.size() : 0));
+
+        for (MultipartFile file : imageFiles) {
+            System.out.println("Received file: " + file.getOriginalFilename());
+        }
+
+
 
         try {
             // Convert JSON String to AdDTO object
@@ -78,5 +86,19 @@ public class AdController {
                     .body(new ResponseDTO(VarList.Internal_Server_Error, "Error deleting ad", null));
         }
     }
+
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<AdDTO>> getAdsByUserId(@PathVariable UUID userId) {
+        List<AdDTO> ads = adService.getAdsByUserId(userId);
+        return ResponseEntity.ok(ads);
+    }
+
+
+
+
+
+
+
 
 }
