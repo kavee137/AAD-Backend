@@ -51,11 +51,16 @@ public class WebSecurityConfig {
                                 "/api/v1/location/parent/{parentLocationId}",
 
                                 "/api/v1/category/{id}",
+                                "/api/v1/category/create",
+                                "/api/v1/category/getAll",
 
 
                                 "/api/v1/ad/getAllActiveAds",
+                                "/api/v1/ad/createAd",
                                 "/api/v1/ad/deleteAd/{adId}",
                                 "/api/v1/ad/user/{userId}",
+
+                                "/uploadImages/*",
 
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
@@ -69,9 +74,9 @@ public class WebSecurityConfig {
 //                        ).hasRole("USER")  // Only accessible by users with ROLE_USER
 
                         // Admin-only endpoints
-                        .requestMatchers(
-                                "/api/v1/category/create"
-                        ).hasRole("ADMIN")  // Only accessible by users with ROLE_ADMIN
+//                        .requestMatchers(
+//
+//                        ).hasRole("ADMIN")  // Only accessible by users with ROLE_ADMIN
 
                         .anyRequest().authenticated()
                 )

@@ -3,6 +3,7 @@ package lk.ijse.aadbackend.dto;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -34,4 +35,6 @@ public class AdDTO {
 
 //    // List of image files to be uploaded
 //    private List<MultipartFile> imageFiles;
+
+    private List<String> imageUrls;
 }

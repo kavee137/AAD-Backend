@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -133,10 +135,25 @@ public class AdServiceImpl implements AdService {
     @Override
     public List<AdDTO> getAdsByUserId(UUID userId) {
         List<Ad> ads = adRepository.findByUserId(userId);
-        return ads.stream()
-                .map(ad -> modelMapper.map(ad, AdDTO.class))
-                .toList();
+        return ads.stream().map(ad -> {
+            AdDTO adDTO = modelMapper.map(ad, AdDTO.class);
+
+            // Convert the comma-separated image string into a list
+            List<String> imageUrls = new ArrayList<>();
+            if (ad.getImages() != null && !ad.getImages().isEmpty()) {
+                imageUrls = Arrays.stream(ad.getImages().split(","))
+                        .map(fileName -> "http://localhost:8082/uploadImages/" + fileName.trim())
+                        .toList();
+            }
+
+            adDTO.setImageUrls(imageUrls);
+            System.out.println("Ad Details:- " + adDTO);
+
+            return adDTO;
+        }).toList();
     }
+
+
 
 
 
