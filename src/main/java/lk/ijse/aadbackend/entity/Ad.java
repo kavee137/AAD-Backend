@@ -52,4 +52,6 @@ public class Ad {
     @Column(columnDefinition = "TEXT")
     private String images;
 
+
+
 }

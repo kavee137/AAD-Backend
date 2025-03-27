@@ -49,6 +49,7 @@ public class WebSecurityConfig {
                                 "/api/v1/user/register",
 
                                 "/api/v1/location/parent/{parentLocationId}",
+                                "api/v1/location/allSubCategories/exclude/{parentId}",
 
                                 "/api/v1/category/{id}",
                                 "/api/v1/category/create",

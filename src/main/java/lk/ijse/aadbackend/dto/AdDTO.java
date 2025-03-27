@@ -33,6 +33,9 @@ public class AdDTO {
     @NotNull(message = "Location ID is required")
     private UUID locationId;
 
+    @NotNull(message = "User Name is required")
+    private String userName;
+
 //    // List of image files to be uploaded
 //    private List<MultipartFile> imageFiles;
 

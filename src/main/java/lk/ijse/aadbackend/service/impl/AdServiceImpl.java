@@ -126,9 +126,22 @@ public class AdServiceImpl implements AdService {
     public List<AdDTO> getAllActiveAds() {
         List<Ad> activeAds = adRepository.findByStatus("ACTIVE");
 
-        return activeAds.stream()
-                .map(ad -> modelMapper.map(ad, AdDTO.class))
-                .toList();
+        return activeAds.stream().map(ad -> {
+            AdDTO adDTO = modelMapper.map(ad, AdDTO.class);
+
+            // Convert the comma-separated image string into a list
+            List<String> imageUrls = new ArrayList<>();
+            if (ad.getImages() != null && !ad.getImages().isEmpty()) {
+                imageUrls = Arrays.stream(ad.getImages().split(","))
+                        .map(fileName -> "http://localhost:8082/uploadImages/" + fileName.trim())
+                        .toList();
+            }
+
+            adDTO.setImageUrls(imageUrls);
+            System.out.println("Ad Details:- " + adDTO);
+
+            return adDTO;
+        }).toList();
     }
 
 

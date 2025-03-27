@@ -21,4 +21,11 @@ public class LocationController {
     public ResponseEntity<List<LocationDTO>> getLocationsByParentId(@PathVariable UUID parentLocationId) {
         return ResponseEntity.ok(locationService.getLocationsByParentId(parentLocationId));
     }
+
+    @GetMapping("allSubCategories/exclude/{parentId}")
+    public ResponseEntity<List<LocationDTO>> getLocations(@PathVariable UUID parentId) {
+        List<LocationDTO> locations = locationService.getLocationsExcludingParent(parentId);
+        return ResponseEntity.ok(locations);
+    }
+
 }

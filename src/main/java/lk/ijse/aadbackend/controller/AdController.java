@@ -33,6 +33,7 @@ public class AdController {
     @GetMapping("/getAllActiveAds")
     public ResponseEntity<ResponseDTO> getAllActiveAds() {
         List<AdDTO> activeAds = adService.getAllActiveAds();
+        System.out.println(activeAds);
 
         return ResponseEntity.ok(new ResponseDTO(VarList.OK, "Active ads retrieved successfully", activeAds));
     }

@@ -28,4 +28,26 @@ public class LocationServiceImpl implements LocationService {
                 .map(location -> modelMapper.map(location, LocationDTO.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<LocationDTO> getLocationsExcludingParent(UUID parentId) {
+        List<Location> locations = locationRepository.findByParentLocationIdNot(parentId);
+
+        if (locations.isEmpty()) {
+            try {
+                throw new ResourceNotFoundException("No locations found excluding parentId: " + parentId);
+            } catch (ResourceNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return locations.stream()
+                .map(location -> modelMapper.map(location, LocationDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    private class ResourceNotFoundException extends Throwable {
+        public ResourceNotFoundException(String s) {
+        }
+    }
 }
