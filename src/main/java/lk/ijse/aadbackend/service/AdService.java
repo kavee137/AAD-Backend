@@ -1,6 +1,7 @@
 package lk.ijse.aadbackend.service;
 
 import lk.ijse.aadbackend.dto.AdDTO;
+import lk.ijse.aadbackend.entity.Ad;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface AdService {
     List<AdDTO> getAllActiveAds();
 
     List<AdDTO> getAdsByUserId(UUID userId);
+
+    AdDTO getAdDetailsByAdId(UUID adId);
 }

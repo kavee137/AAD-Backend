@@ -7,6 +7,7 @@ import lk.ijse.aadbackend.dto.AdDTO;
 import lk.ijse.aadbackend.dto.ResponseDTO;
 import lk.ijse.aadbackend.service.AdService;
 import lk.ijse.aadbackend.util.VarList;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +36,25 @@ public class AdController {
         List<AdDTO> activeAds = adService.getAllActiveAds();
         System.out.println(activeAds);
 
-        return ResponseEntity.ok(new ResponseDTO(VarList.OK, "Active ads retrieved successfully", activeAds));
+        // Add Cache-Control headers to prevent caching
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(new ResponseDTO(VarList.OK, "Active ads retrieved successfully", activeAds));
     }
+
+    @GetMapping("/getAdDetailsByAdId/{adId}")
+    public ResponseEntity<?> getAdById(@PathVariable UUID adId) {
+        AdDTO ad = adService.getAdDetailsByAdId(adId);
+        if (ad != null) {
+            return ResponseEntity.ok(ad);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ad not found");
+        }
+    }
+
 
 
     @PostMapping(value = "/createAd", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

@@ -36,6 +36,8 @@ public class AdDTO {
     @NotNull(message = "User Name is required")
     private String userName;
 
+    private String createdAt;
+
 //    // List of image files to be uploaded
 //    private List<MultipartFile> imageFiles;
 

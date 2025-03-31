@@ -17,10 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -124,7 +121,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public List<AdDTO> getAllActiveAds() {
-        List<Ad> activeAds = adRepository.findByStatus("ACTIVE");
+        List<Ad> activeAds = adRepository.findByStatusOrderByCreatedAtDesc("ACTIVE");
 
         return activeAds.stream().map(ad -> {
             AdDTO adDTO = modelMapper.map(ad, AdDTO.class);
@@ -166,8 +163,30 @@ public class AdServiceImpl implements AdService {
         }).toList();
     }
 
+    @Override
+    public AdDTO getAdDetailsByAdId(UUID adId) {
+        Optional<Ad> adOptional = adRepository.findById(adId);
 
+        if (adOptional.isPresent()) {
+            Ad ad = adOptional.get();
+            AdDTO adDTO = modelMapper.map(ad, AdDTO.class);
 
+            // Convert the comma-separated image string into a list
+            List<String> imageUrls = new ArrayList<>();
+            if (ad.getImages() != null && !ad.getImages().isEmpty()) {
+                imageUrls = Arrays.stream(ad.getImages().split(","))
+                        .map(fileName -> "http://localhost:8082/uploadImages/" + fileName.trim())
+                        .toList();
+            }
+
+            adDTO.setImageUrls(imageUrls);
+            System.out.println("Ad Details: " + adDTO);
+
+            return adDTO;
+        }
+
+        return null; // Or throw a custom exception if needed
+    }
 
 
 }

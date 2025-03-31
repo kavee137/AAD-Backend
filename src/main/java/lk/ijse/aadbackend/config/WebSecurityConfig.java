@@ -58,6 +58,7 @@ public class WebSecurityConfig {
 
                                 "/api/v1/ad/getAllActiveAds",
                                 "/api/v1/ad/createAd",
+                                "/api/v1/ad/getAdDetailsByAdId/{adId}",
                                 "/api/v1/ad/deleteAd/{adId}",
                                 "/api/v1/ad/user/{userId}",
 
