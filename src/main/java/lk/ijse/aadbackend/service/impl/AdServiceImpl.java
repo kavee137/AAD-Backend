@@ -179,6 +179,23 @@ public class AdServiceImpl implements AdService {
                         .toList();
             }
 
+            // Fetch category name
+            if (ad.getCategory() != null) {
+                adDTO.setCategoryName(ad.getCategory().getName());
+            }
+
+            // Fetch location name with parent location
+            if (ad.getLocation() != null) {
+                StringBuilder locationName = new StringBuilder(ad.getLocation().getName());
+
+                if (ad.getLocation().getParentLocation() != null) {
+                    locationName.insert(0, ad.getLocation().getParentLocation().getName() + ", ");
+                }
+
+                adDTO.setLocationName(locationName.toString());
+            }
+
+
             adDTO.setImageUrls(imageUrls);
             System.out.println("Ad Details: " + adDTO);
 
