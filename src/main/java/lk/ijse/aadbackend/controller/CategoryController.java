@@ -51,10 +51,12 @@ public class CategoryController {
         }
     }
 
+    // fetch all categories with parent categories
     @GetMapping("/getAll")
     public ResponseEntity<List<CategoryDTO>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<List<CategoryDTO>> getCategoryById(@PathVariable UUID id) {

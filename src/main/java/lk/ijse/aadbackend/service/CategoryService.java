@@ -12,4 +12,5 @@ public interface CategoryService {
     List<CategoryDTO> getAllCategories();
     List<CategoryDTO> getCategoryByParentCategoryId(UUID id);
     void deleteCategory(UUID id);
+
 }
