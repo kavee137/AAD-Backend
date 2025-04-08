@@ -1,5 +1,6 @@
 package lk.ijse.aadbackend.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import lk.ijse.aadbackend.dto.LocationDTO;
 import lk.ijse.aadbackend.entity.Location;
 import lk.ijse.aadbackend.repo.LocationRepository;
@@ -20,6 +21,15 @@ public class LocationServiceImpl implements LocationService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+
+
+    @Override
+    public LocationDTO findById(UUID id) {
+        Location location = locationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Location not found with id: " + id));
+        return modelMapper.map(location, LocationDTO.class);
+    }
 
     @Override
     public List<LocationDTO> getLocationsByParentId(UUID parentLocationId) {

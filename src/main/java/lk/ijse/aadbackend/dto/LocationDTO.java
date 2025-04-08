@@ -13,4 +13,5 @@ public class LocationDTO {
     private UUID id;
     private String name;
     private UUID parentLocationId;
+    private String parentLocationName;
 }

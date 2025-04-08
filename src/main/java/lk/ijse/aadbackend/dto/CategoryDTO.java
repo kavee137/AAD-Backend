@@ -15,4 +15,6 @@ public class CategoryDTO {
     private String name;
 
     private UUID parentCategoryId;
+
+    private String parentCategoryName;
 }

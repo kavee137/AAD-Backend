@@ -11,6 +11,8 @@ public interface CategoryService {
     int createCategory(CategoryDTO categoryDTO, MultipartFile image) throws IOException;
     List<CategoryDTO> getAllCategories();
     List<CategoryDTO> getCategoryByParentCategoryId(UUID id);
+    List<CategoryDTO> getCategoryByCategoryId(UUID id);
     void deleteCategory(UUID id);
+
 
 }

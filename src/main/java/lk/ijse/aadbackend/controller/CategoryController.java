@@ -3,10 +3,12 @@ package lk.ijse.aadbackend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lk.ijse.aadbackend.dto.CategoryDTO;
 import lk.ijse.aadbackend.dto.ResponseDTO;
+import lk.ijse.aadbackend.entity.Category;
 import lk.ijse.aadbackend.service.CategoryService;
 import lk.ijse.aadbackend.util.VarList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +30,7 @@ public class CategoryController {
     }
 
     @PostMapping(value = "/create", consumes = "multipart/form-data")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ResponseDTO> createCategory(
             @RequestPart("category") String categoryJson,
             @RequestPart(value = "image", required = false) MultipartFile image) {
@@ -59,13 +62,21 @@ public class CategoryController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<CategoryDTO>> getCategoryById(@PathVariable UUID id) {
+    public ResponseEntity<List<CategoryDTO>> getCategoryByParentCategoryId(@PathVariable UUID id) {
         return ResponseEntity.ok(categoryService.getCategoryByParentCategoryId(id));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteCategory(@PathVariable UUID id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.ok("Category deleted successfully");
     }
+
+    @GetMapping("/cid/{id}")
+    public ResponseEntity<List<CategoryDTO>> getCategoryByCategoryId(@PathVariable UUID id) {
+        return ResponseEntity.ok(categoryService.getCategoryByCategoryId(id));
+    }
+
+
 }

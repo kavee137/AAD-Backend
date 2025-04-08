@@ -15,9 +15,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
+
+
 
 
 @Service
@@ -32,6 +40,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private EmailService emailService;
+
+    private static final String UPLOAD_DIR = "uploadImages/";
 
 
     @Override
@@ -62,22 +72,49 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public int saveUser(UserDTO userDTO) {
+    public int saveUser(UserDTO userDTO, MultipartFile image) throws IOException {
         if (userRepository.existsByEmail(userDTO.getEmail())) {
             return VarList.Not_Acceptable;
-        } else {
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
-            // Send Welcome Email
-            emailService.sendWelcomeEmail(userDTO.getEmail(), userDTO.getName());
-
-            userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
-            userRepository.save(modelMapper.map(userDTO, User.class));
-            return VarList.Created;
+        }
+        if (userRepository.existsByPhone(userDTO.getPhone())) {
+            return VarList.Not_Acceptable;
         }
 
+        User user = modelMapper.map(userDTO, User.class);
+
+        if (image != null && !image.isEmpty()) {
+            if (!image.getContentType().startsWith("image/")) {
+                throw new IllegalArgumentException("Only image files are allowed");
+            }
+
+            String imageName = saveImage(image);
+            user.setUserImage(imageName); // Only filename or "uploadImages/" + imageName
+        }
+
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+
+        userRepository.save(user);
+        return VarList.Created;
     }
 
+    private String saveImage(MultipartFile image) throws IOException {
+        File uploadDir = new File(UPLOAD_DIR);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+
+        String fileExtension = getFileExtension(image.getOriginalFilename());
+        String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
+        String filePath = UPLOAD_DIR + uniqueFileName;
+
+        Files.write(Paths.get(filePath), image.getBytes());
+        return uniqueFileName;
+    }
+
+    private String getFileExtension(String filename) {
+        return filename.lastIndexOf('.') > 0 ? filename.substring(filename.lastIndexOf('.')) : "";
+    }
 
 
 

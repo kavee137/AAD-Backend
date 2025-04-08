@@ -38,10 +38,16 @@ public class User implements Serializable {
 
     @Column(nullable = false)
     @NotBlank(message = "Role is required")
-    private String role = "USER";  // Default value "USER"
+    private String role = "USER";
 
     @Column(nullable = false)
-    private String status = "ACTIVE";  // Default value "ACTIVE"
+    private String status = "ACTIVE";
+
+    private String userImage;
+
+    private String isEmailVerified;
+
+    private String isPhoneVerified;
 
 
     private LocalDateTime createdAt = LocalDateTime.now();

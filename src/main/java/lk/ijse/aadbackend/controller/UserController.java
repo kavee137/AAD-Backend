@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @CrossOrigin(origins = "http://localhost:63342") // Allow frontend URL
 @RestController
@@ -25,12 +26,22 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping(value = "/register")
-    public ResponseEntity<ResponseDTO> registerUser(@RequestBody @Valid UserDTO userDTO) {
+    @PostMapping(value = "/register", consumes = "multipart/form-data")
+    public ResponseEntity<ResponseDTO> registerUser(
+            @RequestPart @Valid UserDTO userDTO,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+
         try {
-            int res = userService.saveUser(userDTO);
+
+            int res = userService.saveUser(userDTO, image);
+
+
+            System.out.println("res: " + res);
+
             switch (res) {
                 case VarList.Created -> {
+
+                    System.out.println("In the switch case: " + userDTO);
 
                     String token = jwtUtil.generateToken(userDTO);
                     AuthDTO authDTO = new AuthDTO();
@@ -40,7 +51,7 @@ public class UserController {
                 }
                 case VarList.Not_Acceptable -> {
                     return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-                            .body(new ResponseDTO(VarList.Not_Acceptable, "Email Already Used", null));
+                            .body(new ResponseDTO(VarList.Not_Acceptable, "Email or Phone Number is Already Used", null));
                 }
                 default -> {
                     return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
@@ -48,10 +59,12 @@ public class UserController {
                 }
             }
         } catch (Exception e) {
+            System.out.println("In the catch case: " + userDTO);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDTO(VarList.Internal_Server_Error, e.getMessage(), null));
         }
     }
+
 
 
 

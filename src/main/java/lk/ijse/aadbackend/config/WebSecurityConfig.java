@@ -50,10 +50,13 @@ public class WebSecurityConfig {
 
                                 "/api/v1/location/parent/{parentLocationId}",
                                 "api/v1/location/allSubCategories/exclude/{parentId}",
+                                "api/v1/location/{id}",
 
                                 "/api/v1/category/{id}",
                                 "/api/v1/category/create",
+                                "/api/v1/category/delete/{id}",
                                 "/api/v1/category/getAll",
+                                "/api/v1/category/cid/{id}",
 
 
                                 "/api/v1/ad/getAllActiveAds",
@@ -75,9 +78,9 @@ public class WebSecurityConfig {
 //
 //                        ).hasRole("USER")  // Only accessible by users with ROLE_USER
 
-                        // Admin-only endpoints
+//                         Admin-only endpoints
 //                        .requestMatchers(
-//
+//                                "/api/v1/category/delete/{id}"
 //                        ).hasRole("ADMIN")  // Only accessible by users with ROLE_ADMIN
 
                         .anyRequest().authenticated()

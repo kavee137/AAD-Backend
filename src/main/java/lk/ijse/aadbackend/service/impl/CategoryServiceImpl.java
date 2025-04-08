@@ -13,13 +13,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -89,12 +92,47 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public List<CategoryDTO> getCategoryByCategoryId(UUID id) {
+        Optional<Category> categories = categoryRepository.findById(id);
+        return categories.stream()
+                .map(category -> modelMapper.map(category, CategoryDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
     public void deleteCategory(UUID id) {
-        if (!categoryRepository.existsById(id)) {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+
+        if (optionalCategory.isEmpty()) {
             throw new RuntimeException("Category not found");
         }
+
+        Category category = optionalCategory.get();
+        String imageUrl = category.getImageUrl(); // Store image URL before deletion
+
+        // Try to delete category first
         categoryRepository.deleteById(id);
+        System.out.println("Category deleted successfully: " + id);
+
+        // If category deletion is successful, delete the image
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            try {
+                String filename = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+                Path imagePath = Paths.get("uploadImages", filename);
+
+                if (Files.exists(imagePath)) {
+                    Files.delete(imagePath);
+                    System.out.println("Image deleted successfully: " + filename);
+                } else {
+                    System.out.println("Image file not found: " + filename);
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to delete category image: " + e.getMessage());
+            }
+        }
     }
+
 
 }
 

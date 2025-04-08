@@ -28,4 +28,10 @@ public class LocationController {
         return ResponseEntity.ok(locations);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<LocationDTO> getLocationById(@PathVariable UUID id) {
+        LocationDTO location = locationService.findById(id);
+        return ResponseEntity.ok(location);
+    }
+
 }

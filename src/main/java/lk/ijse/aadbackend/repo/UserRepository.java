@@ -1,5 +1,6 @@
 package lk.ijse.aadbackend.repo;
 
+import jakarta.validation.constraints.NotBlank;
 import lk.ijse.aadbackend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -14,4 +15,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     int deleteByEmail(String userName);
 
+    boolean existsByPhone(@NotBlank(message = "Phone number is required") String phone);
 }

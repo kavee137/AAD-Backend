@@ -10,4 +10,6 @@ public interface LocationService {
     List<LocationDTO> getLocationsByParentId(UUID parentLocationId);
 
     List<LocationDTO> getLocationsExcludingParent(UUID parentId);
+
+    LocationDTO findById(UUID id);
 }

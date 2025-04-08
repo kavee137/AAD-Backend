@@ -1,5 +1,6 @@
 package lk.ijse.aadbackend.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lk.ijse.aadbackend.enums.Status;
@@ -30,6 +31,13 @@ public class UserDTO {
 
     @NotBlank(message = "Phone number is required")
     private String phone;
+
+    private String userImage;
+
+    private String isEmailVerified = "NO";
+
+    private String isPhoneVerified = "NO";
+
 
     private String role = "USER";
 
