@@ -1,10 +1,12 @@
 package lk.ijse.aadbackend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
+
+import jakarta.persistence.EntityNotFoundException;
 import lk.ijse.aadbackend.dto.AdDTO;
 import lk.ijse.aadbackend.dto.ResponseDTO;
+import lk.ijse.aadbackend.entity.Ad;
+import lk.ijse.aadbackend.repo.AdRepository;
 import lk.ijse.aadbackend.service.AdService;
 import lk.ijse.aadbackend.util.VarList;
 import org.springframework.http.HttpHeaders;
@@ -12,12 +14,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.UUID;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.*;
 
 @CrossOrigin(origins = "http://localhost:63342") // Allow frontend URL
 @RestController
@@ -25,9 +28,11 @@ import java.util.UUID;
 public class AdController {
 
     private final AdService adService;
+    private final AdRepository adRepository;
 
-    public AdController(AdService adService) {
+    public AdController(AdService adService, AdRepository adRepository) {
         this.adService = adService;
+        this.adRepository = adRepository;
     }
 
 
@@ -52,6 +57,28 @@ public class AdController {
             return ResponseEntity.ok(ad);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ad not found");
+        }
+    }
+
+
+    @PutMapping(value = "/updateAd", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<ResponseDTO> updateAd(
+            @RequestParam("adDTO") String adDTOJson,
+            @RequestPart(value = "images", required = false) List<MultipartFile> newImages) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            AdDTO adDTO = mapper.readValue(adDTOJson, AdDTO.class);
+
+            int result = adService.updateAd(adDTO, newImages); // implement in service
+
+            if (result == VarList.Created) {
+                return ResponseEntity.ok(new ResponseDTO(VarList.Created, "Ad updated", null));
+            } else {
+                return ResponseEntity.badRequest().body(new ResponseDTO(VarList.Bad_Gateway, "Update failed", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(new ResponseDTO(VarList.Internal_Server_Error, e.getMessage(), null));
         }
     }
 
@@ -112,6 +139,49 @@ public class AdController {
         List<AdDTO> ads = adService.getAdsByUserId(userId);
         return ResponseEntity.ok(ads);
     }
+
+    @GetMapping("/get-ad-images/{adId}")
+    public ResponseEntity<List<Map<String, String>>> getAdImages(@PathVariable UUID adId) throws IOException {
+        // Retrieve the ad object from the database by adId
+        Ad ad = adRepository.findById(adId).orElseThrow(() -> new EntityNotFoundException("Ad not found"));
+
+        // Assuming the imageUrls column contains a comma-separated list of image file names
+        String[] imageUrls = ad.getImages().split(",");
+
+        List<Map<String, String>> images = new ArrayList<>();
+
+        // For each image URL, load the corresponding image from the filesystem
+        for (String imageUrl : imageUrls) {
+            File file = new File("uploadImages/" + imageUrl.trim()); // Assuming image files are stored in the "uploadImages" folder
+            if (file.exists()) {
+                byte[] imageBytes = Files.readAllBytes(file.toPath());
+                String base64 = "data:image/" + getExtension(file.getName()) + ";base64," +
+                        Base64.getEncoder().encodeToString(imageBytes);
+
+                Map<String, String> imageMap = new HashMap<>();
+                imageMap.put("name", file.getName());
+                imageMap.put("base64", base64);
+                images.add(imageMap);
+            }
+        }
+
+//        System.out.println(images);
+
+        return ResponseEntity.ok(images);
+    }
+
+    // Helper method to get image extension
+    private String getExtension(String fileName) {
+        String ext = "";
+        int i = fileName.lastIndexOf('.');
+        if (i > 0) {
+            ext = fileName.substring(i + 1).toLowerCase();
+        }
+        return ext;
+    }
+
+
+
 
 
 

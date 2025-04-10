@@ -4,6 +4,7 @@ import lk.ijse.aadbackend.dto.AdDTO;
 import lk.ijse.aadbackend.entity.Ad;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,4 +18,6 @@ public interface AdService {
     List<AdDTO> getAdsByUserId(UUID userId);
 
     AdDTO getAdDetailsByAdId(UUID adId);
+
+    int updateAd(AdDTO adDTO, List<MultipartFile> newImages) throws IOException;
 }

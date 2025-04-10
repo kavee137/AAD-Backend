@@ -50,4 +50,6 @@ public class AdDTO {
 //    private List<MultipartFile> imageFiles;
 
     private List<String> imageUrls;
+
+    private List<String> existingImageNames;
 }

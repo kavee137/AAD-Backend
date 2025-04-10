@@ -11,11 +11,13 @@ import lk.ijse.aadbackend.service.AdService;
 import lk.ijse.aadbackend.util.VarList;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -204,6 +206,63 @@ public class AdServiceImpl implements AdService {
 
         return null; // Or throw a custom exception if needed
     }
+
+
+
+
+
+    @Override
+    public int updateAd(AdDTO adDTO, List<MultipartFile> newImageFiles) {
+        try {
+            Ad ad = adRepository.findById(adDTO.getId()).orElseThrow();
+
+            ad.setTitle(adDTO.getTitle());
+            ad.setDescription(adDTO.getDescription());
+            ad.setPrice(adDTO.getPrice());
+            ad.setStatus(adDTO.getStatus());
+
+            ad.setCategory(categoryRepository.findById(adDTO.getCategoryId()).orElseThrow());
+            ad.setLocation(locationRepository.findById(adDTO.getLocationId()).orElseThrow());
+
+            ad.setUpdatedAt(LocalDateTime.now());
+
+            // Combine existing + new images
+            List<String> existingImages = adDTO.getExistingImageNames() != null ? adDTO.getExistingImageNames() : new ArrayList<>();
+            List<String> newSavedImages = saveImages(newImageFiles);
+
+            List<String> allImages = new ArrayList<>(existingImages);
+            allImages.addAll(newSavedImages);
+
+            ad.setImages(String.join(",", allImages));
+
+            adRepository.save(ad);
+            return VarList.Created;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return VarList.Bad_Gateway;
+        }
+    }
+
+
+    private List<String> saveImages(List<MultipartFile> imageFiles) throws IOException {
+        if (imageFiles == null || imageFiles.isEmpty()) return new ArrayList<>();
+
+        List<String> fileNames = new ArrayList<>();
+
+
+        String uploadDir = System.getProperty("user.dir") + "/uploadImages/";
+        for (MultipartFile file : imageFiles) {
+            if (!file.isEmpty()) {
+                String uniqueName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+                File destinationFile = new File(uploadDir + File.separator + uniqueName);
+                file.transferTo(destinationFile);
+                fileNames.add(uniqueName);
+            }
+        }
+        return fileNames;
+    }
+
 
 
 }
