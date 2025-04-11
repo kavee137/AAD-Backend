@@ -14,6 +14,7 @@ public class AadBackendApplication {
 
     @Bean
     public ModelMapper modelMapper() {
+
         return new ModelMapper();
     }
 

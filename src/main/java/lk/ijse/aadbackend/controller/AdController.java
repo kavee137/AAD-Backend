@@ -70,7 +70,7 @@ public class AdController {
             ObjectMapper mapper = new ObjectMapper();
             AdDTO adDTO = mapper.readValue(adDTOJson, AdDTO.class);
 
-            int result = adService.updateAd(adDTO, newImages); // implement in service
+            int result = adService.createAd(adDTO, newImages); // implement in service
 
             if (result == VarList.Created) {
                 return ResponseEntity.ok(new ResponseDTO(VarList.Created, "Ad updated", null));

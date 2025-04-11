@@ -18,8 +18,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -46,6 +50,10 @@ public class AdServiceImpl implements AdService {
         try {
             // Create new Ad instance
             Ad ad = new Ad();
+
+            if (adDTO.getId() != null) {
+                ad.setId(adDTO.getId());
+            }
             ad.setTitle(adDTO.getTitle());
             ad.setDescription(adDTO.getDescription());
             ad.setPrice(adDTO.getPrice());
@@ -211,38 +219,65 @@ public class AdServiceImpl implements AdService {
 
 
 
-    @Override
-    public int updateAd(AdDTO adDTO, List<MultipartFile> newImageFiles) {
-        try {
-            Ad ad = adRepository.findById(adDTO.getId()).orElseThrow();
+    public int updateAd(AdDTO adDTO, List<MultipartFile> newImages) throws IOException {
+        Optional<Ad> optionalAd = adRepository.findById(adDTO.getId());
+        if (!optionalAd.isPresent()) return VarList.Not_Found;
 
-            ad.setTitle(adDTO.getTitle());
-            ad.setDescription(adDTO.getDescription());
-            ad.setPrice(adDTO.getPrice());
-            ad.setStatus(adDTO.getStatus());
+        Ad ad = optionalAd.get();
 
-            ad.setCategory(categoryRepository.findById(adDTO.getCategoryId()).orElseThrow());
-            ad.setLocation(locationRepository.findById(adDTO.getLocationId()).orElseThrow());
-
-            ad.setUpdatedAt(LocalDateTime.now());
-
-            // Combine existing + new images
-            List<String> existingImages = adDTO.getExistingImageNames() != null ? adDTO.getExistingImageNames() : new ArrayList<>();
-            List<String> newSavedImages = saveImages(newImageFiles);
-
-            List<String> allImages = new ArrayList<>(existingImages);
-            allImages.addAll(newSavedImages);
-
-            ad.setImages(String.join(",", allImages));
-
-            adRepository.save(ad);
-            return VarList.Created;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return VarList.Bad_Gateway;
+        // 1. Get current image list from DB
+        List<String> dbImageList = new ArrayList<>();
+        if (ad.getImages() != null && !ad.getImages().isEmpty()) {
+            dbImageList = new ArrayList<>(Arrays.asList(ad.getImages().split(",")));
         }
+
+        // 2. Get retained images sent from frontend
+        List<String> retainedImages = adDTO.getExistingImageNames() != null ? adDTO.getExistingImageNames() : new ArrayList<>();
+
+        // 3. Identify deleted images
+        List<String> imagesToDelete = dbImageList.stream()
+                .filter(img -> !retainedImages.contains(img))
+                .collect(Collectors.toList());
+
+        // 4. Delete removed images from uploadImages/ folder
+        for (String imgName : imagesToDelete) {
+            File file = new File("uploadImages/" + imgName);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+
+        // 5. Start final image list with retained ones
+        List<String> finalImageList = new ArrayList<>(retainedImages);
+
+        // 6. Save new uploaded images
+        if (newImages != null && !newImages.isEmpty()) {
+            for (MultipartFile file : newImages) {
+                String uniqueFileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+                Path filePath = Paths.get("uploadImages", uniqueFileName);
+                Files.write(filePath, file.getBytes());
+
+                finalImageList.add(uniqueFileName);
+            }
+        }
+
+        // 7. Update ad entity fields
+        ad.setImages(String.join(",", finalImageList));
+        ad.setTitle(adDTO.getTitle());
+        ad.setDescription(adDTO.getDescription());
+        ad.setPrice(adDTO.getPrice());
+        ad.setStatus(adDTO.getStatus());
+        ad.setUser(userRepository.findById(adDTO.getUserId()).orElse(null));
+        ad.setLocation(locationRepository.findById(adDTO.getLocationId()).orElse(null));
+        ad.setCategory(categoryRepository.findById(adDTO.getCategoryId()).orElse(null));
+
+        // 8. Save and return
+        adRepository.save(ad);
+        return VarList.Created;
     }
+
+
+
 
 
     private List<String> saveImages(List<MultipartFile> imageFiles) throws IOException {

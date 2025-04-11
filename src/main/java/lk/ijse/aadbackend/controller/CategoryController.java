@@ -6,6 +6,7 @@ import lk.ijse.aadbackend.dto.ResponseDTO;
 import lk.ijse.aadbackend.entity.Category;
 import lk.ijse.aadbackend.service.CategoryService;
 import lk.ijse.aadbackend.util.VarList;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,10 +24,12 @@ public class CategoryController {
 
     private final CategoryService categoryService;
     private final ObjectMapper objectMapper; // JSON parser
+    private final ModelMapper modelMapper;
 
-    public CategoryController(CategoryService categoryService, ObjectMapper objectMapper) {
+    public CategoryController(CategoryService categoryService, ObjectMapper objectMapper, ModelMapper modelMapper) {
         this.categoryService = categoryService;
         this.objectMapper = objectMapper;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping(value = "/create", consumes = "multipart/form-data")

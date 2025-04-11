@@ -39,21 +39,31 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public int createCategory(CategoryDTO categoryDTO, MultipartFile image) throws IOException {
-        Category category = modelMapper.map(categoryDTO, Category.class);
+        // Create a new Category entity manually
+        Category category = new Category();
 
+        // Manually set properties from DTO to entity
+        category.setName(categoryDTO.getName());
+
+        // Handle image if provided
         if (image != null && !image.isEmpty()) {
             String imageName = saveImage(image);
             category.setImageUrl(UPLOAD_DIR + imageName);
+        } else if (categoryDTO.getImageUrl() != null) {
+            // Use existing image URL if provided in the DTO
+            category.setImageUrl(categoryDTO.getImageUrl());
         }
 
+        // Handle parent category relationship
         if (categoryDTO.getParentCategoryId() != null) {
             Category parentCategory = categoryRepository.findById(categoryDTO.getParentCategoryId())
                     .orElseThrow(() -> new RuntimeException("Parent category not found"));
             category.setParentCategory(parentCategory);
         }
 
-        Category savedCategory = categoryRepository.save(category);
-        modelMapper.map(savedCategory, CategoryDTO.class);
+        // Save the category
+        categoryRepository.save(category);
+
         return VarList.Created;
     }
 
