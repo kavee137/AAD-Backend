@@ -20,4 +20,9 @@ public interface AdService {
     AdDTO getAdDetailsByAdId(UUID adId);
 
     int updateAd(AdDTO adDTO, List<MultipartFile> newImages) throws IOException;
+
+    int countActiveAdsByParentCategory(UUID parentCategoryId);
+
+    List<AdDTO> filterAds(UUID subcategoryId, UUID districtId, UUID cityId);
+
 }

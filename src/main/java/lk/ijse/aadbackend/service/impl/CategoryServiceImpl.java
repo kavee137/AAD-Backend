@@ -45,6 +45,10 @@ public class CategoryServiceImpl implements CategoryService {
         // Manually set properties from DTO to entity
         category.setName(categoryDTO.getName());
 
+        if (categoryDTO.getId() != null) {
+            category.setId(categoryDTO.getId());
+        }
+
         // Handle image if provided
         if (image != null && !image.isEmpty()) {
             String imageName = saveImage(image);

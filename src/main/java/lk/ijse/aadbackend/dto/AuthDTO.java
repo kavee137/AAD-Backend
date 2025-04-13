@@ -1,5 +1,7 @@
 package lk.ijse.aadbackend.dto;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +20,9 @@ public class AuthDTO {
     private String token;
     private String role;
     private String name;
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String userImage;
 
 }

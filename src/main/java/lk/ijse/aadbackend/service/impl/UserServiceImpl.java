@@ -3,11 +3,13 @@ package lk.ijse.aadbackend.service.impl;
 import lk.ijse.aadbackend.dto.UserDTO;
 import lk.ijse.aadbackend.email.EmailService;
 import lk.ijse.aadbackend.entity.User;
+import lk.ijse.aadbackend.enums.Status;
 import lk.ijse.aadbackend.repo.UserRepository;
 import lk.ijse.aadbackend.service.UserService;
 import lk.ijse.aadbackend.util.VarList;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,11 +18,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -114,6 +118,67 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     private String getFileExtension(String filename) {
         return filename.lastIndexOf('.') > 0 ? filename.substring(filename.lastIndexOf('.')) : "";
+    }
+
+
+    @Override
+    public UserDTO getUserById(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with ID: " + id));
+
+        return mapUserToUserDTO(user);
+    }
+
+    private UserDTO mapUserToUserDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setName(user.getName());
+        userDTO.setEmail(user.getEmail());
+        // Note: We typically don't send the password back
+        userDTO.setPassword(null);
+        userDTO.setPhone(user.getPhone());
+        userDTO.setUserImage(user.getUserImage());
+        userDTO.setIsEmailVerified(user.getIsEmailVerified());
+        userDTO.setIsPhoneVerified(user.getIsPhoneVerified());
+        userDTO.setRole(user.getRole());
+        userDTO.setStatus(Status.valueOf(user.getStatus()));
+
+        return userDTO;
+    }
+
+
+
+
+
+    @Override
+    @Transactional
+    public void updateUserPhoto(UUID id, String base64Image) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with ID: " + id));
+
+        // Validate the base64 string (optional)
+        if (base64Image == null || !base64Image.startsWith("data:image/")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid image format");
+        }
+
+        // Update user with the base64 image
+        user.setUserImage(base64Image);
+        user.setUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUserPhoto(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with ID: " + id));
+
+        // Remove the user's photo
+        user.setUserImage(null);
+        user.setUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(user);
     }
 
 

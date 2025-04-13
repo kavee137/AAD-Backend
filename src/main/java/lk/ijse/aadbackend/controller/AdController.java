@@ -180,6 +180,21 @@ public class AdController {
         return ext;
     }
 
+    @GetMapping("/count/by-parent-category/{parentCategoryId}")
+    public ResponseEntity<Integer> getAdCountByParentCategory(@PathVariable UUID parentCategoryId) {
+        return ResponseEntity.ok(adService.countActiveAdsByParentCategory(parentCategoryId));
+    }
+
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<AdDTO>> filterAds(
+            @RequestParam(required = false) UUID subcategoryId,
+            @RequestParam(required = false) UUID districtId,
+            @RequestParam(required = false) UUID cityId
+    ) {
+        List<AdDTO> filteredAds = adService.filterAds(subcategoryId, districtId, cityId);
+        return ResponseEntity.ok(filteredAds);
+    }
 
 
 

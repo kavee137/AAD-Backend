@@ -277,26 +277,97 @@ public class AdServiceImpl implements AdService {
     }
 
 
-
-
-
-    private List<String> saveImages(List<MultipartFile> imageFiles) throws IOException {
-        if (imageFiles == null || imageFiles.isEmpty()) return new ArrayList<>();
-
-        List<String> fileNames = new ArrayList<>();
-
-
-        String uploadDir = System.getProperty("user.dir") + "/uploadImages/";
-        for (MultipartFile file : imageFiles) {
-            if (!file.isEmpty()) {
-                String uniqueName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-                File destinationFile = new File(uploadDir + File.separator + uniqueName);
-                file.transferTo(destinationFile);
-                fileNames.add(uniqueName);
-            }
-        }
-        return fileNames;
+    @Override
+    public int countActiveAdsByParentCategory(UUID parentCategoryId) {
+        return adRepository.countActiveAdsByParentCategory(parentCategoryId);
     }
+
+
+
+
+    @Override
+    public List<AdDTO> filterAds(UUID subcategoryId, UUID districtId, UUID cityId) {
+        List<Ad> ads;
+        String status = "ACTIVE";
+
+        if (subcategoryId != null && districtId != null && cityId != null) {
+            // All filters applied
+            ads = adRepository.findByStatusAndCategoryIdAndLocationParentLocationIdAndLocationId(
+                    status, subcategoryId, districtId, cityId);
+        } else if (subcategoryId != null && districtId != null) {
+            // Category and district
+            ads = adRepository.findByStatusAndCategoryIdAndLocationParentLocationId(
+                    status, subcategoryId, districtId);
+        } else if (subcategoryId != null && cityId != null) {
+            // Category and city
+            ads = adRepository.findByStatusAndCategoryIdAndLocationId(
+                    status, subcategoryId, cityId);
+        } else if (districtId != null && cityId != null) {
+            // District and city
+            ads = adRepository.findByStatusAndLocationParentLocationIdAndLocationId(
+                    status, districtId, cityId);
+        } else if (subcategoryId != null) {
+            // Only category
+            ads = adRepository.findByStatusAndCategoryId(status, subcategoryId);
+        } else if (districtId != null) {
+            // Only district
+            ads = adRepository.findByStatusAndLocationParentLocationId(status, districtId);
+        } else if (cityId != null) {
+            // Only city
+            ads = adRepository.findByStatusAndLocationId(status, cityId);
+        } else {
+            // No filters
+            ads = adRepository.findByStatus(status);
+        }
+
+        return ads.stream()
+                .map(ad -> {
+                    AdDTO dto = modelMapper.map(ad, AdDTO.class);
+                    // Manually set userName and locationName
+                    dto.setUserName(ad.getUser().getName());
+                    dto.setLocationName(ad.getLocation().getName());
+                    // Convert images string to List<String> of URLs
+                    List<String> imageUrls = new ArrayList<>();
+                    if (ad.getImages() != null && !ad.getImages().isEmpty()) {
+                        String[] imageFilenames = ad.getImages().split(",");
+                        for (String filename : imageFilenames) {
+                            imageUrls.add("http://localhost:8082/uploadImages/" + filename.trim());
+                        }
+                    }
+                    dto.setImageUrls(imageUrls);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+
+
+
+
+
+
+
+
+
+
+//
+//    private List<String> saveImages(List<MultipartFile> imageFiles) throws IOException {
+//        if (imageFiles == null || imageFiles.isEmpty()) return new ArrayList<>();
+//
+//        List<String> fileNames = new ArrayList<>();
+//
+//
+//        String uploadDir = System.getProperty("user.dir") + "/uploadImages/";
+//        for (MultipartFile file : imageFiles) {
+//            if (!file.isEmpty()) {
+//                String uniqueName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+//                File destinationFile = new File(uploadDir + File.separator + uniqueName);
+//                file.transferTo(destinationFile);
+//                fileNames.add(uniqueName);
+//            }
+//        }
+//        return fileNames;
+//    }
 
 
 

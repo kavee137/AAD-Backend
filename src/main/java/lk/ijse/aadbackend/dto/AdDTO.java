@@ -44,6 +44,8 @@ public class AdDTO {
 
     private String locationName;
 
+    private String parentLocationName;
+
     private String createdAt;
 
 //    // List of image files to be uploaded

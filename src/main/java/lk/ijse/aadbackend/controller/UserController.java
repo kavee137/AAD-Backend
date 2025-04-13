@@ -13,6 +13,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
+import java.util.UUID;
+
 @CrossOrigin(origins = "http://localhost:63342") // Allow frontend URL
 @RestController
 @RequestMapping("api/v1/user")
@@ -66,6 +69,29 @@ public class UserController {
     }
 
 
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable UUID id) {
+        UserDTO user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
+    }
 
+
+
+
+
+
+    // Upload photo endpoint
+    @PutMapping("/{id}/photo")
+    public ResponseEntity<?> updateUserPhoto(@PathVariable UUID id, @RequestBody UserDTO photoDTO) {
+        userService.updateUserPhoto(id, photoDTO.getUserImage());
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "Photo updated successfully"));
+    }
+
+    // Delete photo endpoint
+    @DeleteMapping("/{id}/photo")
+    public ResponseEntity<?> deleteUserPhoto(@PathVariable UUID id) {
+        userService.deleteUserPhoto(id);
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "Photo deleted successfully"));
+    }
 
 }

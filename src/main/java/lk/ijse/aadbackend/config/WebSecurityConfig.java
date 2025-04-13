@@ -47,6 +47,8 @@ public class WebSecurityConfig {
                                 "/api/v1/auth/refreshToken",
                                 "/api/v1/auth/login",
                                 "/api/v1/user/register",
+                                "/api/v1/user/{id}",
+                                "/api/v1/user/{id}/photo",
 
                                 "/api/v1/location/parent/{parentLocationId}",
                                 "api/v1/location/allSubCategories/exclude/{parentId}",
@@ -59,6 +61,7 @@ public class WebSecurityConfig {
                                 "/api/v1/category/cid/{id}",
 
 
+
                                 "/api/v1/ad/getAllActiveAds",
                                 "/api/v1/ad/createAd",
                                 "/api/v1/ad/updateAd",
@@ -66,6 +69,8 @@ public class WebSecurityConfig {
                                 "/api/v1/ad/deleteAd/{adId}",
                                 "/api/v1/ad/user/{userId}",
                                 "/api/v1/ad/get-ad-images/{adId}",
+                                "/api/v1/ad/count/by-parent-category/{parentCategoryId}",
+                                "/api/v1/ad/filter",
 
                                 "/uploadImages/*",
 

@@ -43,7 +43,10 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String status = "ACTIVE";
 
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String userImage;
+
 
     private String isEmailVerified;
 

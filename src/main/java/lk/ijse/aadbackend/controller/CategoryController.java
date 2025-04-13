@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lk.ijse.aadbackend.dto.CategoryDTO;
 import lk.ijse.aadbackend.dto.ResponseDTO;
 import lk.ijse.aadbackend.entity.Category;
+import lk.ijse.aadbackend.service.AdService;
 import lk.ijse.aadbackend.service.CategoryService;
+import lk.ijse.aadbackend.service.impl.AdServiceImpl;
 import lk.ijse.aadbackend.util.VarList;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -25,11 +27,13 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final ObjectMapper objectMapper; // JSON parser
     private final ModelMapper modelMapper;
+    private final AdServiceImpl adServiceImpl;
 
-    public CategoryController(CategoryService categoryService, ObjectMapper objectMapper, ModelMapper modelMapper) {
+    public CategoryController(CategoryService categoryService, ObjectMapper objectMapper, ModelMapper modelMapper, AdServiceImpl adServiceImpl) {
         this.categoryService = categoryService;
         this.objectMapper = objectMapper;
         this.modelMapper = modelMapper;
+        this.adServiceImpl = adServiceImpl;
     }
 
     @PostMapping(value = "/create", consumes = "multipart/form-data")
@@ -41,6 +45,8 @@ public class CategoryController {
         try {
             // Convert JSON string to CategoryDTO
             CategoryDTO categoryDTO = objectMapper.readValue(categoryJson, CategoryDTO.class);
+
+            System.out.println("CategoryDTO: " + categoryDTO);
 
             int createdCategory = categoryService.createCategory(categoryDTO, image);
 
@@ -80,6 +86,9 @@ public class CategoryController {
     public ResponseEntity<List<CategoryDTO>> getCategoryByCategoryId(@PathVariable UUID id) {
         return ResponseEntity.ok(categoryService.getCategoryByCategoryId(id));
     }
+
+
+
 
 
 }
