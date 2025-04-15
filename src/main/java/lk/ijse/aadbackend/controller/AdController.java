@@ -39,7 +39,7 @@ public class AdController {
     @GetMapping("/getAllActiveAds")
     public ResponseEntity<ResponseDTO> getAllActiveAds() {
         List<AdDTO> activeAds = adService.getAllActiveAds();
-        System.out.println(activeAds);
+//        System.out.println(activeAds);
 
         // Add Cache-Control headers to prevent caching
         HttpHeaders headers = new HttpHeaders();

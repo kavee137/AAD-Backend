@@ -61,6 +61,15 @@ public class WebSecurityConfig {
                                 "/api/v1/category/cid/{id}",
 
 
+                                "/api/v1/chat/save",
+                                "/api/v1/chat/ads/{userId}",
+                                "/api/v1/chat/read/{chatId}",
+                                "/api/v1/chat/{user1Id}/{user2Id}/{adId}",
+                                "/api/v1/chat/unread/{receiverId}",
+                                "/api/v1/chat/{userId}/{adId}/participant",
+
+
+
 
                                 "/api/v1/ad/getAllActiveAds",
                                 "/api/v1/ad/createAd",

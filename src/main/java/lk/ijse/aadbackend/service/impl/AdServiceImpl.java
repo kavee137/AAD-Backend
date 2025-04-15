@@ -145,7 +145,7 @@ public class AdServiceImpl implements AdService {
             }
 
             adDTO.setImageUrls(imageUrls);
-            System.out.println("Ad Details:- " + adDTO);
+//            System.out.println("Ad Details:- " + adDTO);
 
             return adDTO;
         }).toList();
@@ -167,7 +167,7 @@ public class AdServiceImpl implements AdService {
             }
 
             adDTO.setImageUrls(imageUrls);
-            System.out.println("Ad Details:- " + adDTO);
+//            System.out.println("Ad Details:- " + adDTO);
 
             return adDTO;
         }).toList();
@@ -207,7 +207,7 @@ public class AdServiceImpl implements AdService {
 
 
             adDTO.setImageUrls(imageUrls);
-            System.out.println("Ad Details: " + adDTO);
+//            System.out.println("Ad Details: " + adDTO);
 
             return adDTO;
         }

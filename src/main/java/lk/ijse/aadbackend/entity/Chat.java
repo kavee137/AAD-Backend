@@ -19,6 +19,7 @@ public class Chat {
     private UUID id;
 
     @NotBlank(message = "Message cannot be empty")
+    @Column(columnDefinition = "LONGTEXT")
     @Lob
     private String message;
 
@@ -38,4 +39,18 @@ public class Chat {
     @ManyToOne
     @JoinColumn(name = "ad_id", nullable = false)
     private Ad ad;
+
+
+    @PrePersist
+    public void prePersist() {
+        if (this.timestamp == null) {
+            this.timestamp = LocalDateTime.now();
+        }
+        if (this.id == null) {
+            this.id = UUID.randomUUID();
+        }
+        if (this.status == null) {
+            this.status = "SENT";
+        }
+    }
 }

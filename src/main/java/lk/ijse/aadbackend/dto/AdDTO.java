@@ -38,6 +38,8 @@ public class AdDTO {
 
     private String userPhone;
 
+    private String userImage;
+
     private String userCreatedAt;
 
     private String categoryName;

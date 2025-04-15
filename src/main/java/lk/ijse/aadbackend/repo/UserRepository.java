@@ -18,5 +18,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     boolean existsByPhone(@NotBlank(message = "Phone number is required") String phone);
 
-    Optional<User> findById(UUID id);
+
 }
