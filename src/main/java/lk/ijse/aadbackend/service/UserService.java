@@ -17,5 +17,8 @@ public interface UserService {
 
     void deleteUserPhoto(UUID id);
 
+    boolean changePassword(UUID userId, String currentPassword, String newPassword);
+
+
 
 }

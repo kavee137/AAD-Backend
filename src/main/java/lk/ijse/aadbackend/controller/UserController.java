@@ -2,6 +2,7 @@ package lk.ijse.aadbackend.controller;
 
 import jakarta.validation.Valid;
 import lk.ijse.aadbackend.dto.AuthDTO;
+import lk.ijse.aadbackend.dto.ChangePasswordRequestDTO;
 import lk.ijse.aadbackend.dto.ResponseDTO;
 import lk.ijse.aadbackend.dto.UserDTO;
 import lk.ijse.aadbackend.service.UserService;
@@ -9,11 +10,12 @@ import lk.ijse.aadbackend.util.JwtUtil;
 import lk.ijse.aadbackend.util.VarList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:63342") // Allow frontend URL
@@ -76,10 +78,6 @@ public class UserController {
     }
 
 
-
-
-
-
     // Upload photo endpoint
     @PutMapping("/{id}/photo")
     public ResponseEntity<?> updateUserPhoto(@PathVariable UUID id, @RequestBody UserDTO photoDTO) {
@@ -94,4 +92,25 @@ public class UserController {
         return ResponseEntity.ok().body(Collections.singletonMap("message", "Photo deleted successfully"));
     }
 
+
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequestDTO request) {
+        boolean isChanged = userService.changePassword(request.getUserId(), request.getCurrentPassword(), request.getNewPassword());
+
+        if (isChanged) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Password changed successfully");
+            return ResponseEntity.ok(response);
+        } else {
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", "Current password is incorrect");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+
 }
+

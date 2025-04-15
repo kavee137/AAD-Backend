@@ -49,6 +49,7 @@ public class WebSecurityConfig {
                                 "/api/v1/user/register",
                                 "/api/v1/user/{id}",
                                 "/api/v1/user/{id}/photo",
+                                "/api/v1/user/change-password",
 
                                 "/api/v1/location/parent/{parentLocationId}",
                                 "api/v1/location/allSubCategories/exclude/{parentId}",
